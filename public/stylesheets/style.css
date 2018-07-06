@@ -1,0 +1,21 @@
+body {
+  padding: 50px;
+  font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+a { color: #00B7FF; }
+
+.email {
+  margin: 5px;
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  box-shadow: 0 1px 2px #ddd;
+}
+
+.product {
+  margin: 5px;
+  padding: 10px;
+  border: 1px solid blue;
+  border-radius: 5px;
+  box-shadow: 0 1px 2px #ddd;
+}
