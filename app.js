@@ -4,10 +4,9 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var fileUpload = require('express-fileupload');
-var session = require('express-session')
-
-var products = require('./routes/products');
-var index = require('./routes/index');
+var jwt = require('jsonwebtoken');
+var cors = require('cors')
+var router = express.Router();
 
 
 var app = express();
@@ -24,40 +23,51 @@ app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileUpload());
-
-app.use(session({
-  secret: 'work hard',
-  resave: true,
-  saveUninitialized: false
-}));
+app.use(cors());
+app.disable('etag');
 
 app.use((req, res, next) => {
-  res.locals.session = req.session;
-  res.locals.isAuth = req.session.uid !== undefined;
-  next();
+  var token = req.cookies.token;
+  if (token) {
+
+    jwt.verify(token, process.env.JWT_SECRET, function (err, token_data) {
+        if (err) {
+          res.clearCookie('token');
+          return res.status(403).send("cannot parse token");
+        }
+        req.user_data = token_data;
+        next();
+      }
+    );
+  }
+  else {
+    next();
+  }
 });
 
-app.get('/', products.list);
-app.post('/', products.submit(app.get('images')));
+var productRoutes = require('./api/routes/productRoutes'); //importing route
+var authRoutes = require('./api/routes/authRoutes'); //importing route
+productRoutes(router);
+authRoutes(router);
 
-app.post("/login", index.login);
-app.post("/logout", index.logout);
+app.use(router);
+
+app.get('/', (req, res) => res.send('Hello World!'));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-    next(createError(404));
+  next(createError(404));
 });
 
 // error handler
 app.use(function (err, req, res, next) {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-    // render the error page
-    res.status(err.status || 500);
-    res.render('error');
+  // render the error page
+  res.status(err.status || 500);
+  res.render('error');
 });
-
 
 module.exports = app;

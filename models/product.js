@@ -1,8 +1,11 @@
 var mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/allegier');
+mongoose.Promise = global.Promise;
+
+mongoose.connect('mongodb://localhost/gSell');
 var schema = new mongoose.Schema({
   title: String,
+  category: String,
   description: String,
   price: Number,
   img: String

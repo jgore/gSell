@@ -6,52 +6,5 @@
 </head>
 <body>
 
-<% if(isAuth){ %>
-<form action='/logout' method="post">
-    <input type='submit' value='Logout'/>
-</form>
-<% }  else { %>
-<form action='/login' method='post'>
-    <p>
-        <input type='text' name='username' placeholder='Username'/>
-    </p>
-    <p>
-        <input type='password' name='password' placeholder='Password'/>
-    </p>
-    <p>
-        <input type='submit' value='Login'/>
-    </p>
-</form>
-<% } %>
-
-<h2> Products </h2>
-
-<div class="product">
-    <h2>add a product</h2>
-    <form method='post' enctype='multipart/form-data'>
-
-        <p><input type='file' name='img'/></p>
-        <p><input type='text' name='title'/></p>
-        <p><input type='text' name='description'/></p>
-        <p><input type='text' name='price'/></p>
-        <p><input type='submit' value='Upload'/></p>
-    </form>
-</div>
-
-<% product.forEach(function(product) { %>
-<div class="product">
-    <img width="160" height="100" src='/images/<%= product.img %>'/>
-    <h2>Tytuł:<%= product.title %></h2>
-    <h2>Opis: <%= product.description %></h2>
-    <h2>Cena: <%= product.price %></h2>
-</div>
-
-</body>
-</html>
-
-<% }) %>
-</div>
-
-
 </body>
 </html>

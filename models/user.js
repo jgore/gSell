@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/allegier');
+mongoose.connect('mongodb://localhost/gSell');
 var schema = new mongoose.Schema({
   username: String,
   password: String,
@@ -12,7 +12,7 @@ User.authenticate = function (req,next, cb) {
   User.findOne({username: req.body.username} ).exec( function(err, user){
     if( !user) return next(err);
     if(  user.password === req.body.password ){
-      cb(user);
+      cb(req);
     }
   })
 };
